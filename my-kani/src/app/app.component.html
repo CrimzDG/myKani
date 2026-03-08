@@ -1,62 +1,53 @@
 <div class="container">
 
   <!-- HEADER -->
-  <header class="header">
-    <div class="header__eyebrow">
-      <span class="tag tag--red">WaniKani</span>
-      <span class="tag tag--gold">BETA</span>
+  <header class="header" [class.header--compact]="state.isLoggedIn">
+
+    <div class="header__inner">
+      <div class="header__left">
+        <div class="header__eyebrow">
+          <span class="tag tag--red">WaniKani</span>
+          <span class="tag tag--gold">BETA</span>
+        </div>
+        <a routerLink="/" class="header__title-link">
+          <h1 class="header__title">MY<span class="header__title--accent">漢字</span></h1>
+        </a>
+        <p class="header__sub">千里の道も一歩から</p>
+      </div>
+
+      <!-- NAV — only shows when logged in -->
+      @if (state.isLoggedIn) {
+        <nav class="nav">
+          <!-- Hamburger button -->
+          <button class="nav__toggle" (click)="toggleMenu()">
+            <span class="nav__toggle-line"></span>
+            <span class="nav__toggle-line"></span>
+            <span class="nav__toggle-line"></span>
+          </button>
+
+          <!-- Menu -->
+          <div class="nav__menu" [class.nav__menu--open]="menuOpen">
+            <a routerLink="/"
+               routerLinkActive="nav__link--active"
+               [routerLinkActiveOptions]="{exact: true}"
+               class="nav__link"
+               (click)="closeMenu()">
+              統計 STATS
+            </a>
+            <a routerLink="/levels"
+               routerLinkActive="nav__link--active"
+               class="nav__link"
+               (click)="closeMenu()">
+              級 LEVELS
+            </a>
+          </div>
+        </nav>
+      }
     </div>
-    <h1 class="header__title">MY<span class="header__title--accent">漢字</span></h1>
-    <p class="header__sub">千里の道も一歩から</p>
+
   </header>
 
-  <!-- API KEY INPUT -->
-  <section class="api-section box">
-    <h3>[ ENTER API KEY ]</h3>
-    <p class="api-section__hint">wanikani.com → Settings → API Tokens → Generate Token</p>
-    <div class="api-section__form">
-      <input type="text" [(ngModel)]="apiKey" placeholder="PASTE YOUR WANIKANI API KEY HERE..." />
-      <button class="btn--red" (click)="connect()">CONNECT →</button>
-    </div>
-    @if (errorMessage) {
-      <p class="error">{{ errorMessage }}</p>
-    }
-  </section>
-
-  <!-- USER CARD — only renders once API key is connected -->
-  @if (user) {
-    <section class="user-card box box--red">
-
-      <div class="user-card__header">
-        <span class="tag tag--red">CONNECTED</span>
-        <h2 class="user-card__username">{{ user.username }}</h2>
-      </div>
-
-      <hr>
-
-      <div class="stats-grid">
-
-        <div class="user-card__stat">
-          <p class="stat-label">Level</p>
-          <p class="stat-number">{{ user.level }}</p>
-        </div>
-
-        <div class="user-card__stat">
-          <p class="stat-label">Subscription</p>
-          <p class="stat-number stat-number--sm">{{ user.subscription.type | uppercase }}</p>
-        </div>
-
-        <div class="user-card__stat">
-          <p class="stat-label">{{ sinceDate === user.started_at ? 'Member Since' : 'Reset In' }}</p>
-          <p class="stat-number stat-number--sm">{{ sinceDate | date:'MMM yyyy' | uppercase }}</p>
-        </div>
-
-      </div>
-
-    </section>
-  }
-
-  <!-- ROUTER OUTLET (future pages will render here) -->
+  <!-- PAGE CONTENT -->
   <main>
     <router-outlet />
   </main>

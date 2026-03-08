@@ -1,0 +1,70 @@
+@if (!state.isLoggedIn) {
+  <p class="no-data">// NO DATA — CONNECT YOUR API KEY ON THE DASHBOARD FIRST</p>
+} @else if (!levels.length) {
+  <p class="no-data">// NO LEVEL PROGRESSIONS FOUND</p>
+} @else {
+
+  <!-- SUMMARY STATS -->
+  <section class="level-summary box box--red">
+    <h3 class="section-title">[ LEVEL SUMMARY ]</h3>
+    <div class="stats-grid">
+      <div class="user-card__stat">
+        <p class="stat-label">Current Level</p>
+        <p class="stat-number">{{ state.user.level }}</p>
+      </div>
+      <div class="user-card__stat">
+        <p class="stat-label">Avg Days / Level</p>
+        <p class="stat-number">{{ avgDays }}</p>
+      </div>
+      @if (fastestLevel) {
+        <div class="user-card__stat">
+          <p class="stat-label">Fastest Level</p>
+          <p class="stat-number">{{ fastestLevel.level }}</p>
+          <p class="stat-sublabel">{{ fastestLevel.days }}d</p>
+        </div>
+      }
+      @if (slowestLevel) {
+        <div class="user-card__stat">
+          <p class="stat-label">Slowest Level</p>
+          <p class="stat-number">{{ slowestLevel.level }}</p>
+          <p class="stat-sublabel">{{ slowestLevel.days }}d</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- BAR CHART -->
+  <section class="chart-section">
+    <h3 class="section-title">[ DAYS PER LEVEL ]</h3>
+    <p class="chart-hint">// Each bar represents days spent at that level. Current level shown in red.</p>
+
+    <div class="chart">
+      @for (row of levels; track row.level) {
+        <div class="chart__row" [class.chart__row--current]="row.isCurrent">
+
+          <!-- Level number label -->
+          <span class="chart__level-label">{{ row.level }}</span>
+
+          <!-- Bar + kanji watermark -->
+          <div class="chart__bar-wrap">
+            <div class="chart__bar"
+                 [class.chart__bar--current]="row.isCurrent"
+                 [style.width.%]="row.barPct">
+              <span class="chart__kanji">{{ row.kanji }}</span>
+            </div>
+          </div>
+
+          <!-- Days value -->
+          <span class="chart__days">
+            {{ row.days }}d
+            @if (row.isCurrent) {
+              <span class="chart__current-tag">NOW</span>
+            }
+          </span>
+
+        </div>
+      }
+    </div>
+  </section>
+
+}

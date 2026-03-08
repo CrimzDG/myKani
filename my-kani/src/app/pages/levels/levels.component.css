@@ -1,0 +1,130 @@
+.no-data {
+  font-family: var(--font-mono);
+  color: var(--grey-light);
+  margin: var(--space-lg) 0;
+  letter-spacing: 2px;
+}
+
+/* ─── SUMMARY ─────────────────────────────────────── */
+
+.level-summary {
+  margin: var(--space-lg) 0;
+}
+
+.level-summary .stats-grid {
+  align-items: end;
+  margin-top: var(--space-md);
+}
+
+.stat-sublabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--grey-light);
+  margin-top: 2px;
+}
+
+/* ─── CHART ───────────────────────────────────────── */
+
+.chart-section {
+  margin: var(--space-lg) 0;
+}
+
+.chart-hint {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--grey-light);
+  margin-bottom: var(--space-md);
+  letter-spacing: 1px;
+}
+
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 3px solid var(--black);
+  padding-left: var(--space-sm);
+}
+
+/* Each row = one level */
+.chart__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 2rem;
+}
+
+.chart__row--current .chart__level-label {
+  color: var(--red);
+  font-weight: 900;
+}
+
+/* Fixed-width level number column */
+.chart__level-label {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-size: 0.75rem;
+  width: 2rem;
+  text-align: right;
+  flex-shrink: 0;
+  color: var(--grey-light);
+}
+
+/* The bar track — fills remaining space */
+.chart__bar-wrap {
+  flex: 1;
+  position: relative;
+  height: 1.75rem;
+  background: var(--grey-dark);
+  border: 1px solid var(--grey-mid);
+  overflow: hidden;
+}
+
+/* The filled bar — width driven by [style.width.%] binding */
+.chart__bar {
+  height: 100%;
+  background: var(--black);
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  min-width: 2rem;
+  transition: width 0.6s ease;
+}
+
+.chart__bar--current {
+  background: var(--red);
+}
+
+/* Kanji watermark inside the bar */
+.chart__kanji {
+  position: absolute;
+  right: 4px;
+  font-size: 1.2rem;
+  opacity: 0.2;
+  color: var(--white);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Days label to the right */
+.chart__days {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--grey-light);
+  width: 4.5rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chart__current-tag {
+  font-size: 0.6rem;
+  font-family: var(--font-sans);
+  font-weight: 900;
+  color: var(--red);
+  letter-spacing: 1px;
+  border: 1px solid var(--red);
+  padding: 0 3px;
+}
