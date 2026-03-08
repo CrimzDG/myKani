@@ -7,7 +7,6 @@
 }
 
 :root {
-  /* Japanese-inspired palette — ink on washi paper */
   --black: #0D0D0D;
   --white: #F2EFE4;
   --red: #BC002D;
@@ -23,7 +22,6 @@
   --font-mono: 'Courier New', Courier, monospace;
   --font-sans: Arial, Helvetica, sans-serif;
 
-  /* Spacing scale */
   --space-xs: 0.5rem;
   --space-sm: 1rem;
   --space-md: 1.5rem;
@@ -38,7 +36,6 @@ html, body {
   font-size: 16px;
   line-height: 1.5;
   min-height: 100vh;
-  /* Prevent horizontal scroll on mobile */
   overflow-x: hidden;
 }
 
@@ -47,7 +44,6 @@ h1, h2, h3, h4 {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -1px;
-  /* Fluid type — shrinks gracefully on small screens */
   word-break: break-word;
 }
 
@@ -81,14 +77,12 @@ hr {
   padding: 0 var(--space-sm);
 }
 
-/* Responsive padding bump on larger screens */
 @media (min-width: 640px) {
   .container {
     padding: 0 var(--space-lg);
   }
 }
 
-/* Generic flex row that wraps to column on mobile */
 .flex-row {
   display: flex;
   flex-direction: column;
@@ -102,7 +96,6 @@ hr {
   }
 }
 
-/* Stats grid — 1 col mobile, 2 col tablet, 4 col desktop */
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -161,7 +154,6 @@ button, .btn {
   cursor: pointer;
   letter-spacing: 2px;
   transition: none;
-  /* Full width on mobile, auto on larger */
   width: 100%;
   text-align: center;
 }
@@ -209,10 +201,8 @@ input {
   border: var(--border);
   padding: 0.6rem 1rem;
   font-family: var(--font-mono);
-  font-size: 1rem;
   outline: none;
   width: 100%;
-  /* Prevent zoom on iOS when focused */
   font-size: max(1rem, 16px);
 }
 
@@ -239,10 +229,16 @@ input::placeholder {
   line-height: 1;
 }
 
+/* Medium variant for text-based stats like subscription type and dates */
+.stat-number--sm {
+  font-size: clamp(1.25rem, 3.5vw, 2rem);
+  letter-spacing: -0.5px;
+}
+
 .stat-label {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 3px;
   color: var(--grey-light);
-  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }

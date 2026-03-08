@@ -50,11 +50,9 @@
   font-size: 0.85rem;
   color: var(--grey-light);
   margin-bottom: var(--space-md);
-  /* Wrap long paths gracefully on small screens */
   word-break: break-word;
 }
 
-/* Stack vertically on mobile, row on desktop */
 .api-section__form {
   display: flex;
   flex-direction: column;
@@ -78,4 +76,31 @@
   margin-top: var(--space-sm);
   text-transform: uppercase;
   letter-spacing: 2px;
+}
+
+/* ─── USER CARD ───────────────────────────────────── */
+
+.user-card {
+  margin: var(--space-lg) 0;
+}
+
+.user-card__header {
+  margin-bottom: var(--space-md);
+}
+
+.user-card__username {
+  color: var(--black);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  margin-bottom: var(--space-md);
+}
+
+/* align-items: end makes each cell shrink to its content height
+   so the border-left on the cell is exactly as tall as the text */
+.user-card .stats-grid {
+  align-items: end;
+}
+
+.user-card__stat {
+  border-left: 4px solid var(--red);
+  padding-left: var(--space-sm);
 }

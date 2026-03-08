@@ -18,10 +18,43 @@
       <input type="text" [(ngModel)]="apiKey" placeholder="PASTE YOUR WANIKANI API KEY HERE..." />
       <button class="btn--red" (click)="connect()">CONNECT →</button>
     </div>
-  @if (errorMessage) {
-    <p class="error">{{ errorMessage }}</p>
-  }
+    @if (errorMessage) {
+      <p class="error">{{ errorMessage }}</p>
+    }
   </section>
+
+  <!-- USER CARD — only renders once API key is connected -->
+  @if (user) {
+    <section class="user-card box box--red">
+
+      <div class="user-card__header">
+        <span class="tag tag--red">CONNECTED</span>
+        <h2 class="user-card__username">{{ user.username }}</h2>
+      </div>
+
+      <hr>
+
+      <div class="stats-grid">
+
+        <div class="user-card__stat">
+          <p class="stat-label">Level</p>
+          <p class="stat-number">{{ user.level }}</p>
+        </div>
+
+        <div class="user-card__stat">
+          <p class="stat-label">Subscription</p>
+          <p class="stat-number stat-number--sm">{{ user.subscription.type | uppercase }}</p>
+        </div>
+
+        <div class="user-card__stat">
+          <p class="stat-label">{{ sinceDate === user.started_at ? 'Member Since' : 'Reset In' }}</p>
+          <p class="stat-number stat-number--sm">{{ sinceDate | date:'MMM yyyy' | uppercase }}</p>
+        </div>
+
+      </div>
+
+    </section>
+  }
 
   <!-- ROUTER OUTLET (future pages will render here) -->
   <main>
