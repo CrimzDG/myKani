@@ -1,0 +1,73 @@
+/* APP COMPONENT STYLES */
+
+/* ─── HEADER ──────────────────────────────────────── */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl) 0 var(--space-lg);
+  border-bottom: 6px solid var(--red);
+  margin-bottom: var(--space-lg);
+}
+
+.header__eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.header__title {
+  font-size: clamp(3.5rem, 15vw, 8rem);
+  line-height: 1;
+  margin-bottom: var(--space-xs);
+  color: var(--black);
+}
+
+.header__title--accent {
+  color: var(--red);
+}
+
+.header__sub {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 2vw, 1rem);
+  color: var(--grey-light);
+  margin-top: var(--space-xs);
+}
+
+/* ─── API SECTION ─────────────────────────────────── */
+
+.api-section {
+  margin: var(--space-lg) 0;
+}
+
+.api-section h3 {
+  margin-bottom: var(--space-xs);
+  color: var(--red);
+}
+
+.api-section__hint {
+  font-size: 0.85rem;
+  color: var(--grey-light);
+  margin-bottom: var(--space-md);
+  /* Wrap long paths gracefully on small screens */
+  word-break: break-word;
+}
+
+/* Stack vertically on mobile, row on desktop */
+.api-section__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 640px) {
+  .api-section__form {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .api-section__form input {
+    flex: 1;
+  }
+}

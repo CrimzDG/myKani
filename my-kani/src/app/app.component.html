@@ -1,2 +1,28 @@
-<h1>WANIKANI STATS</h1>
-<p>built with brutalism in mind.</p>
+<div class="container">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__eyebrow">
+      <span class="tag tag--red">WaniKani</span>
+      <span class="tag tag--gold">BETA</span>
+    </div>
+    <h1 class="header__title">MY<span class="header__title--accent">漢字</span></h1>
+    <p class="header__sub">千里の道も一歩から</p>
+  </header>
+
+  <!-- API KEY INPUT -->
+  <section class="api-section box">
+    <h3>[ ENTER API KEY ]</h3>
+    <p class="api-section__hint">wanikani.com → Settings → API Tokens → Generate Token</p>
+    <div class="api-section__form">
+      <input type="text" placeholder="PASTE YOUR WANIKANI API KEY HERE..." />
+      <button class="btn--red">CONNECT →</button>
+    </div>
+  </section>
+
+  <!-- ROUTER OUTLET (future pages will render here) -->
+  <main>
+    <router-outlet />
+  </main>
+
+</div>
