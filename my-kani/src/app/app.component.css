@@ -1,28 +1,18 @@
-/* APP SHELL STYLES */
+/* APP COMPONENT STYLES */
 
 /* ─── HEADER ──────────────────────────────────────── */
 
 .header {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl) 0 var(--space-lg);
   border-bottom: 6px solid var(--red);
   margin-bottom: var(--space-lg);
-  padding: var(--space-xl) 0 var(--space-lg);
   transition: padding 0.5s ease;
 }
 
 .header--compact {
   padding: var(--space-sm) 0 var(--space-md);
-}
-
-.header__inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: var(--space-sm);
-}
-
-.header__left {
-  display: flex;
-  flex-direction: column;
 }
 
 .header__eyebrow {
@@ -32,8 +22,8 @@
   margin-bottom: var(--space-sm);
   overflow: hidden;
   max-height: 2rem;
+  transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
   opacity: 1;
-  transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.4s ease;
 }
 
 .header--compact .header__eyebrow {
@@ -42,18 +32,10 @@
   margin-bottom: 0;
 }
 
-.header__title-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-.header__title-link:hover {
-  background: none;
-}
-
 .header__title {
   font-size: clamp(3.5rem, 12vw, 8rem);
   line-height: 1;
+  margin-bottom: var(--space-xs);
   color: var(--black);
   transition: font-size 0.5s ease;
 }
@@ -69,6 +51,7 @@
   font-size: clamp(0.9rem, 2.5vw, 1.2rem);
   color: var(--grey-light);
   margin-top: var(--space-xs);
+  overflow: hidden;
   max-height: 2rem;
   opacity: 1;
   transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.4s ease;
@@ -80,94 +63,7 @@
   margin-top: 0;
 }
 
-/* ─── NAV ─────────────────────────────────────────── */
-
-.nav {
-  position: relative;
-  flex-shrink: 0;
-  align-self: flex-end;
-  padding-bottom: 4px;
-}
-
-/* Hamburger button */
-.nav__toggle {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  background: transparent;
-  border: var(--border);
-  padding: 8px 10px;
-  cursor: pointer;
-  width: auto;
-}
-
-.nav__toggle:hover {
-  background: var(--black);
-}
-
-.nav__toggle:hover .nav__toggle-line {
-  background: var(--white);
-}
-
-.nav__toggle-line {
-  display: block;
-  width: 22px;
-  height: 3px;
-  background: var(--black);
-}
-
-/* Dropdown menu */
-.nav__menu {
-  display: none;
-  flex-direction: column;
-  position: absolute;
-  top: calc(100% + 4px);
-  right: 0;
-  background: var(--white);
-  border: var(--border);
-  min-width: 180px;
-  z-index: 100;
-}
-
-.nav__menu--open {
-  display: flex;
-}
-
-.nav__link {
-  display: block;
-  padding: var(--space-sm) var(--space-md);
-  font-family: var(--font-sans);
-  font-weight: 900;
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  text-decoration: none;
-  color: var(--black);
-  border-bottom: 2px solid var(--grey-dark);
-  text-transform: uppercase;
-}
-
-.nav__link:last-child {
-  border-bottom: none;
-}
-
-.nav__link:hover {
-  background: var(--black);
-  color: var(--white);
-}
-
-.nav__link--active {
-  background: var(--red);
-  color: var(--white);
-  border-left: 4px solid var(--black);
-}
-
-.nav__link--active:hover {
-  background: var(--red);
-  color: var(--white);
-}
-
-/* ─── DASHBOARD STYLES (used by dashboard component) ─ */
+/* ─── API SECTION ─────────────────────────────────── */
 
 .api-section {
   margin: var(--space-lg) 0;
@@ -235,6 +131,8 @@
   letter-spacing: 2px;
 }
 
+/* ─── LOADING ─────────────────────────────────────── */
+
 .loading-block { margin: var(--space-lg) 0; }
 
 .loading {
@@ -250,6 +148,8 @@
   margin-top: var(--space-xs);
   font-family: var(--font-mono);
 }
+
+/* ─── USER CARD ───────────────────────────────────── */
 
 .user-card { margin: var(--space-lg) 0; }
 
@@ -287,10 +187,14 @@
   white-space: nowrap;
 }
 
+/* ─── SECTION TITLES ──────────────────────────────── */
+
 .section-title {
   color: var(--red);
   margin-bottom: var(--space-sm);
 }
+
+/* ─── LEARNT PANEL ────────────────────────────────── */
 
 .learnt-panel { margin: var(--space-lg) 0; }
 
@@ -330,6 +234,8 @@
 .learnt-breakdown { font-family: var(--font-mono); font-size: 0.8rem; color: var(--grey-light); margin-top: var(--space-xs); }
 .learnt-card__accuracy { font-family: var(--font-mono); font-size: 0.8rem; color: var(--grey-light); margin-top: var(--space-xs); line-height: 1.6; }
 
+/* ─── ACCORDION ───────────────────────────────────── */
+
 .accordion { margin: var(--space-lg) 0; }
 
 .accordion__item { border: var(--border); border-bottom: none; background: var(--grey-dark); }
@@ -361,6 +267,8 @@
 .accordion__trigger-right { display: flex; align-items: center; gap: var(--space-sm); }
 .accordion__preview { font-family: var(--font-mono); font-size: 0.85rem; color: var(--grey-light); }
 .accordion__chevron { font-size: 0.75rem; color: var(--grey-light); }
+
+/* ─── ACCORDION BODY ──────────────────────────────── */
 
 .accordion__body { padding: var(--space-md); border-top: var(--border); background: var(--white); }
 

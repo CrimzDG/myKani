@@ -1,53 +1,245 @@
 <div class="container">
 
-  <!-- HEADER -->
-  <header class="header" [class.header--compact]="state.isLoggedIn">
-
-    <div class="header__inner">
-      <div class="header__left">
-        <div class="header__eyebrow">
-          <span class="tag tag--red">WaniKani</span>
-          <span class="tag tag--gold">BETA</span>
-        </div>
-        <a routerLink="/" class="header__title-link">
-          <h1 class="header__title">MY<span class="header__title--accent">蟹</span></h1>
-        </a>
-        <p class="header__sub">千里の道も一歩から</p>
-      </div>
-
-      <!-- NAV — only shows when logged in -->
-      @if (state.isLoggedIn) {
-        <nav class="nav">
-          <!-- Hamburger button -->
-          <button class="nav__toggle" (click)="toggleMenu()">
-            <span class="nav__toggle-line"></span>
-            <span class="nav__toggle-line"></span>
-            <span class="nav__toggle-line"></span>
-          </button>
-
-          <!-- Menu -->
-          <div class="nav__menu" [class.nav__menu--open]="menuOpen">
-            <a routerLink="/"
-               routerLinkActive="nav__link--active"
-               [routerLinkActiveOptions]="{exact: true}"
-               class="nav__link"
-               (click)="closeMenu()">
-              統計 STATS
-            </a>
-            <a routerLink="/levels"
-               routerLinkActive="nav__link--active"
-               class="nav__link"
-               (click)="closeMenu()">
-              級 LEVELS
-            </a>
-          </div>
-        </nav>
-      }
+  <!-- HEADER — shrinks smoothly once user data loads -->
+  <header class="header" [class.header--compact]="!!user">
+    <div class="header__eyebrow">
+      <span class="tag tag--red">WaniKani</span>
+      <span class="tag tag--gold">BETA</span>
     </div>
-
+    <h1 class="header__title">MY<span class="header__title--accent">漢字</span></h1>
+    <p class="header__sub">千里の道も一歩から</p>
   </header>
 
-  <!-- PAGE CONTENT -->
+  <!-- API KEY INPUT — hidden once connected -->
+  @if (!user) {
+    <section class="api-section box">
+      <h3>[ ENTER API KEY ]</h3>
+      <p class="api-section__hint">wanikani.com → Settings → API Tokens → Generate Token</p>
+      <div class="api-section__form">
+        <input type="text" [(ngModel)]="apiKey" placeholder="PASTE YOUR WANIKANI API KEY HERE..." />
+        <button class="btn--red" (click)="connect()">CONNECT →</button>
+      </div>
+      <div class="api-section__remember">
+        <label class="remember-label">
+          <input type="checkbox" [(ngModel)]="rememberKey" />
+          REMEMBER KEY BETWEEN SESSIONS
+        </label>
+        <p class="api-section__hint" style="margin:0">
+          {{ rememberKey ? '// SAVED TO LOCAL STORAGE — PERSISTS AFTER BROWSER CLOSE' : '// SESSION ONLY — CLEARED WHEN TAB CLOSES' }}
+        </p>
+      </div>
+      @if (errorMessage) {
+        <p class="error">{{ errorMessage }}</p>
+      }
+    </section>
+  }
+
+  <!-- LOADING -->
+  @if (isLoading) {
+    <div class="loading-block">
+      <p class="loading">// FETCHING DATA FROM WANIKANI...</p>
+      <p class="loading-sub">This may take a moment for large accounts</p>
+    </div>
+  }
+
+  <!-- CONNECTED STATE -->
+  @if (user && !isLoading) {
+
+    <!-- USER CARD -->
+    <section class="user-card box box--red">
+      <div class="user-card__top">
+        <div class="user-card__header">
+          <span class="tag tag--red">CONNECTED</span>
+          <h2 class="user-card__username">{{ user.username }}</h2>
+        </div>
+        <button class="btn--ghost btn--sm" (click)="clearApiKey()">✕ DISCONNECT</button>
+      </div>
+      <hr>
+      <div class="stats-grid">
+        <div class="user-card__stat">
+          <p class="stat-label">Level</p>
+          <p class="stat-number">{{ user.level }}</p>
+        </div>
+        <div class="user-card__stat">
+          <p class="stat-label">Subscription</p>
+          <p class="stat-number stat-number--sm">{{ user.subscription.type | uppercase }}</p>
+        </div>
+        <div class="user-card__stat">
+          <p class="stat-label">{{ sinceDate === user.started_at ? 'Member Since' : 'Reset In' }}</p>
+          <p class="stat-number stat-number--sm">{{ sinceDate | date:'MMM yyyy' | uppercase }}</p>
+        </div>
+        @if (radicals && kanji && vocab) {
+          <div class="user-card__stat">
+            <p class="stat-label">Overall Accuracy</p>
+            <p class="stat-number">{{ totalAccuracy | number:'1.2-2' }}%</p>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- LEARNT ITEMS -->
+    @if (radicals && kanji && vocab) {
+
+      <section class="learnt-panel">
+        <h3 class="section-title">[ LEARNT ITEMS — GURU+ ]</h3>
+        <div class="learnt-grid">
+
+          <div class="learnt-card learnt-card--total box">
+            <p class="stat-label">Total Learnt</p>
+            <p class="stat-number">{{ totalGuruPlus }}</p>
+            <p class="learnt-breakdown">
+              <span style="color:var(--radical)">{{ radicals.guruPlus }} 部</span>
+              &nbsp;·&nbsp;
+              <span style="color:var(--kanji)">{{ kanji.guruPlus }} 漢</span>
+              &nbsp;·&nbsp;
+              <span style="color:var(--vocab)">{{ vocab.guruPlus }} 語</span>
+            </p>
+          </div>
+
+          <div class="learnt-card learnt-card--radical box">
+            <div class="learnt-card__label-row">
+              <span class="learnt-card__icon">部</span>
+              <p class="stat-label">Radicals</p>
+            </div>
+            <p class="stat-number stat-number--radical">{{ radicals.guruPlus }}</p>
+            <p class="learnt-card__accuracy">
+              {{ accuracyPct(radicals.meaningCorrect, radicals.meaningIncorrect) | number:'1.1-1' }}% meaning
+            </p>
+          </div>
+
+          <div class="learnt-card learnt-card--kanji box">
+            <div class="learnt-card__label-row">
+              <span class="learnt-card__icon">漢</span>
+              <p class="stat-label">Kanji</p>
+            </div>
+            <p class="stat-number stat-number--kanji">{{ kanji.guruPlus }}</p>
+            <p class="learnt-card__accuracy">
+              {{ accuracyPct(kanji.meaningCorrect, kanji.meaningIncorrect) | number:'1.1-1' }}% meaning
+              &nbsp;·&nbsp;
+              {{ accuracyPct(kanji.readingCorrect, kanji.readingIncorrect) | number:'1.1-1' }}% reading
+            </p>
+          </div>
+
+          <div class="learnt-card learnt-card--vocab box">
+            <div class="learnt-card__label-row">
+              <span class="learnt-card__icon">語</span>
+              <p class="stat-label">Vocabulary</p>
+            </div>
+            <p class="stat-number stat-number--vocab">{{ vocab.guruPlus }}</p>
+            <p class="learnt-card__accuracy">
+              {{ accuracyPct(vocab.meaningCorrect, vocab.meaningIncorrect) | number:'1.1-1' }}% meaning
+              &nbsp;·&nbsp;
+              {{ accuracyPct(vocab.readingCorrect, vocab.readingIncorrect) | number:'1.1-1' }}% reading
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ACCURACY BREAKDOWN ACCORDION -->
+      <section class="accordion">
+        <h3 class="section-title">[ ACCURACY BREAKDOWN ]</h3>
+
+        <!-- RADICALS -->
+        <div class="accordion__item accordion__item--radical"
+             [class.accordion__item--open-radical]="openSection === 'radicals'">
+          <button class="accordion__trigger" (click)="toggleSection('radicals')">
+            <span class="accordion__trigger-left">
+              <span class="accordion__icon">部</span>
+              <span>RADICALS</span>
+            </span>
+            <span class="accordion__trigger-right">
+              <span class="accordion__preview">{{ accuracyPct(radicals.meaningCorrect, radicals.meaningIncorrect) | number:'1.1-1' }}%</span>
+              <span class="accordion__chevron">{{ openSection === 'radicals' ? '▲' : '▼' }}</span>
+            </span>
+          </button>
+          @if (openSection === 'radicals') {
+            <div class="accordion__body">
+              <div class="accuracy-grid">
+                <div class="accuracy-item--radical">
+                  <p class="stat-label">Meaning Accuracy</p>
+                  <p class="stat-number">{{ accuracyPct(radicals.meaningCorrect, radicals.meaningIncorrect) | number:'1.2-2' }}%</p>
+                  <p class="accuracy-detail">{{ radicals.meaningCorrect }}✓ &nbsp; {{ radicals.meaningIncorrect }}✗ &nbsp; {{ radicals.meaningCorrect + radicals.meaningIncorrect }} total</p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- KANJI -->
+        <div class="accordion__item accordion__item--kanji"
+             [class.accordion__item--open-kanji]="openSection === 'kanji'">
+          <button class="accordion__trigger" (click)="toggleSection('kanji')">
+            <span class="accordion__trigger-left">
+              <span class="accordion__icon">漢</span>
+              <span>KANJI</span>
+            </span>
+            <span class="accordion__trigger-right">
+              <span class="accordion__preview">
+                {{ accuracyPct(kanji.meaningCorrect, kanji.meaningIncorrect) | number:'1.1-1' }}%
+                &nbsp;/&nbsp;
+                {{ accuracyPct(kanji.readingCorrect, kanji.readingIncorrect) | number:'1.1-1' }}%
+              </span>
+              <span class="accordion__chevron">{{ openSection === 'kanji' ? '▲' : '▼' }}</span>
+            </span>
+          </button>
+          @if (openSection === 'kanji') {
+            <div class="accordion__body">
+              <div class="accuracy-grid">
+                <div class="accuracy-item--kanji">
+                  <p class="stat-label">Meaning Accuracy</p>
+                  <p class="stat-number">{{ accuracyPct(kanji.meaningCorrect, kanji.meaningIncorrect) | number:'1.2-2' }}%</p>
+                  <p class="accuracy-detail">{{ kanji.meaningCorrect }}✓ &nbsp; {{ kanji.meaningIncorrect }}✗ &nbsp; {{ kanji.meaningCorrect + kanji.meaningIncorrect }} total</p>
+                </div>
+                <div class="accuracy-item--kanji">
+                  <p class="stat-label">Reading Accuracy</p>
+                  <p class="stat-number">{{ accuracyPct(kanji.readingCorrect, kanji.readingIncorrect) | number:'1.2-2' }}%</p>
+                  <p class="accuracy-detail">{{ kanji.readingCorrect }}✓ &nbsp; {{ kanji.readingIncorrect }}✗ &nbsp; {{ kanji.readingCorrect + kanji.readingIncorrect }} total</p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- VOCAB -->
+        <div class="accordion__item accordion__item--vocab"
+             [class.accordion__item--open-vocab]="openSection === 'vocab'">
+          <button class="accordion__trigger" (click)="toggleSection('vocab')">
+            <span class="accordion__trigger-left">
+              <span class="accordion__icon">語</span>
+              <span>VOCABULARY</span>
+            </span>
+            <span class="accordion__trigger-right">
+              <span class="accordion__preview">
+                {{ accuracyPct(vocab.meaningCorrect, vocab.meaningIncorrect) | number:'1.1-1' }}%
+                &nbsp;/&nbsp;
+                {{ accuracyPct(vocab.readingCorrect, vocab.readingIncorrect) | number:'1.1-1' }}%
+              </span>
+              <span class="accordion__chevron">{{ openSection === 'vocab' ? '▲' : '▼' }}</span>
+            </span>
+          </button>
+          @if (openSection === 'vocab') {
+            <div class="accordion__body">
+              <div class="accuracy-grid">
+                <div class="accuracy-item--vocab">
+                  <p class="stat-label">Meaning Accuracy</p>
+                  <p class="stat-number">{{ accuracyPct(vocab.meaningCorrect, vocab.meaningIncorrect) | number:'1.2-2' }}%</p>
+                  <p class="accuracy-detail">{{ vocab.meaningCorrect }}✓ &nbsp; {{ vocab.meaningIncorrect }}✗ &nbsp; {{ vocab.meaningCorrect + vocab.meaningIncorrect }} total</p>
+                </div>
+                <div class="accuracy-item--vocab">
+                  <p class="stat-label">Reading Accuracy</p>
+                  <p class="stat-number">{{ accuracyPct(vocab.readingCorrect, vocab.readingIncorrect) | number:'1.2-2' }}%</p>
+                  <p class="accuracy-detail">{{ vocab.readingCorrect }}✓ &nbsp; {{ vocab.readingIncorrect }}✗ &nbsp; {{ vocab.readingCorrect + vocab.readingIncorrect }} total</p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+      </section>
+    }
+  }
+
   <main>
     <router-outlet />
   </main>

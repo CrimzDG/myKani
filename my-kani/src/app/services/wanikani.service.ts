@@ -48,8 +48,4 @@ export class WanikaniService {
     return this.fetchAllPages('https://api.wanikani.com/v2/review_statistics', apiKey);
   }
 
-  getLevelProgressions(apiKey: string): Promise<any[]> {
-    return this.fetchAllPages('https://api.wanikani.com/v2/level_progressions', apiKey);
-  }
-
 }
