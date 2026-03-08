@@ -71,3 +71,11 @@
     flex: 1;
   }
 }
+
+.error {
+  color: var(--red);
+  font-size: 0.85rem;
+  margin-top: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}

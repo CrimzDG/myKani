@@ -16,8 +16,11 @@
     <p class="api-section__hint">wanikani.com → Settings → API Tokens → Generate Token</p>
     <div class="api-section__form">
       <input type="text" [(ngModel)]="apiKey" placeholder="PASTE YOUR WANIKANI API KEY HERE..." />
-      <button class="btn--red">CONNECT →</button>
+      <button class="btn--red" (click)="connect()">CONNECT →</button>
     </div>
+  @if (errorMessage) {
+    <p class="error">{{ errorMessage }}</p>
+  }
   </section>
 
   <!-- ROUTER OUTLET (future pages will render here) -->

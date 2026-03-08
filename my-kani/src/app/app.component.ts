@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { WanikaniService } from './services/wanikani.service';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,19 @@ import { FormsModule } from '@angular/forms';
 })
 export class AppComponent {
   apiKey: string = '';
+  errorMessage: string = '';
+
+
+  constructor(private wanikani: WanikaniService) {}
 
   connect() {
-    console.log('API key was entered:', this.apiKey)
+  if (!this.apiKey.trim()) {
+    this.errorMessage = 'NO API KEY ENTERED.';
+    return;
   }
+  this.errorMessage = '';
+  this.wanikani.getUser(this.apiKey).then(data => {
+    console.log(data);
+  });
+}
 }
