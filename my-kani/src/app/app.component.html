@@ -15,7 +15,7 @@
     <h3>[ ENTER API KEY ]</h3>
     <p class="api-section__hint">wanikani.com → Settings → API Tokens → Generate Token</p>
     <div class="api-section__form">
-      <input type="text" placeholder="PASTE YOUR WANIKANI API KEY HERE..." />
+      <input type="text" [(ngModel)]="apiKey" placeholder="PASTE YOUR WANIKANI API KEY HERE..." />
       <button class="btn--red">CONNECT →</button>
     </div>
   </section>
